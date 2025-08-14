@@ -1,0 +1,173 @@
+@import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
+
+:root {
+  --bg-overlay: rgba(15, 18, 25, 0.65);
+  --panel-bg: rgba(255, 255, 255, 0.9);
+  --panel-text: #0f1219;
+  --accent: #2f6fed;
+  --muted: #6b7280;
+  --border: rgba(15, 18, 25, 0.12);
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  color: var(--panel-text);
+}
+
+/* Map container covers the screen */
+.map-root {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: #f0f0f0; /* Fallback background */
+}
+.leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1;
+}
+
+/* Ensure Leaflet tiles are visible */
+.leaflet-tile {
+  filter: none !important;
+}
+
+/* Fix for Leaflet controls */
+.leaflet-control-container {
+  z-index: 1000;
+}
+
+/* Overlay layout */
+.overlay-root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-rows: 64px 1fr;
+  grid-template-columns: 280px 1fr;
+  grid-template-areas:
+    "header header"
+    "sidebar main";
+  height: 100vh;
+  pointer-events: none; /* allow map interactions except on panels */
+}
+
+.header {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  backdrop-filter: saturate(120%) blur(6px);
+  background: var(--bg-overlay);
+  color: white;
+  pointer-events: auto;
+}
+.brand {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-weight: 700;
+}
+.brand-badge {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  background: white;
+  color: #0f1219;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.sidebar {
+  grid-area: sidebar;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(15, 18, 25, 0.15);
+  pointer-events: auto; /* panels capture interaction */
+}
+.panel-header {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+.panel-body {
+  padding: 12px;
+  color: var(--muted);
+}
+
+.main {
+  grid-area: main;
+  padding: 16px;
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.stat {
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 8px 20px rgba(15, 18, 25, 0.15);
+}
+.stat h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.stat .value {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+}
+.btn {
+  pointer-events: auto;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn.primary {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+@media (max-width: 900px) {
+  .overlay-root {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "main";
+  }
+  .sidebar { display: none; }
+  .stat-cards { grid-template-columns: 1fr; }
+}
